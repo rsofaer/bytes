@@ -47,7 +47,7 @@ fn proof_put_u8() {
     let mut buf = Vec::with_capacity(vsz);
     let param = kani::any();
     buf.put_u8(param);
-    assert_eq!(&[param], &buf[..]);
+    kani::assert(&[param] == &buf[..]);
 }
 
 #[cfg(kani)]
@@ -58,12 +58,12 @@ fn proof_put_u16() {
     let mut buf = Vec::with_capacity(vsz);
     let param: u16 = kani::any();
     buf.put_u16(param);
-    assert_eq!(param.to_be_bytes(), &buf[..]);
+    kani::assert(param.to_be_bytes() == &buf[..]);
 
     buf.clear();
     let param2: u16 = kani::any();
     buf.put_u16_le(param2);
-    assert_eq!(param2.to_le_bytes(), &buf[..]);
+    kani::assert(param2.to_le_bytes()== &buf[..]);
 }
 
 #[cfg(kani)]
@@ -77,7 +77,7 @@ fn proof_put_int() {
     let sz: usize = kani::any();
     kani::assume(sz < n.to_be_bytes().len());
     buf.put_int(n, sz);
-    assert_eq!(&n.to_be_bytes()[(8-sz)..], &buf[..]);
+    kani::assert(&n.to_be_bytes()[(8-sz)..] == &buf[..]);
 }
 
 #[cfg(kani)]
